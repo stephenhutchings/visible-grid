@@ -1,0 +1,28 @@
+{
+  "name": "zepto.iostap",
+  "version": "0.0.1",
+  "homepage": "https://github.com/stephenhutchings/zepto.iostap",
+  "authors": [
+    "stephenhutchings <stephen@creativelicence.com.au>"
+  ],
+  "description": "A micro-library for iOS-like tap events in the browser",
+  "main": "build/zepto.revolver.min.js",
+  "keywords": [
+    "touch",
+    "tap",
+    "ios",
+    "zepto",
+    "plugin",
+    "lightwieght"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "Cakefile",
+    "package.json",
+    "config.rb",
+    "src"
+  ]
+}

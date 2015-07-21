@@ -1,0 +1,26 @@
+{
+  "name": "visible-grid",
+  "version": "0.0.1",
+  "description": "Design and develop with a visible grid",
+  "main": "visible-grid.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/stephenhutchings/visible-grid.git"
+  },
+  "author": "Stephen Hutchings",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/stephenhutchings/visible-grid/issues"
+  },
+  "dependencies": {
+    "flour": "~0.5.6",
+    "uglify-js": "~2.4.12",
+    "coffee-script": "~1.7.0",
+    "jshint": "~2.4.3",
+    "rimraf": "~2.2.6",
+    "jade": "~1.1.5"
+  }
+}

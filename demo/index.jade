@@ -1,0 +1,77 @@
+doctype html
+html
+head
+  meta(charset="utf-8")
+  title= config.name
+  meta(name="description" content=config.description)
+  meta(name="viewport" content="width=device-width, initial-scale=1")
+  link(href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:300|Source+Sans+Pro:600|Source+Code+Pro:400' rel='stylesheet' type='text/css')
+  link(rel="stylesheet" href="style.css")
+    
+
+body
+
+  #wrapper
+    header.block: .container.text-center
+      h1: code= config.name
+      p= config.description
+
+    .container
+      .row
+        .col-sm-6
+          h2 What is it?
+          p
+            code= config.name
+            |  makes it easier to develop and design beautiful web 
+            | applications by making your grid system visible while you work.
+
+          p 
+            | Configure as many grids as you want. They are saved to 
+            code localStorage
+            | , so you can use them on any page your working on.
+            | Resizing is taken care of automatically, so if you have a
+            | responsive set-up simply resize to see the grid at that width.
+
+          p Quickly toggle the UI and grid with the 
+            strong “u”
+            |  and 
+            strong “g”
+            |  hot-keys. You can programmatically add, remove and reset grids 
+            | too.
+
+        .col-sm-6
+          h2 How do I use it?
+          p Add the JS to your page. It's all packaged in there.
+          pre: code.
+            &lt;script src="visual-grid.js" type="text/javascript"&gt;
+
+          p Then you can create a new instance on your page.
+          pre: code.
+            var myGrid = new Grid();
+
+    hr
+
+    .container.text-center
+      h4 Example
+      p This example shows Bootstrap’s 12 column grid. Resize your browser to demo the grid at different sizes.
+      .row
+        .col-xs-12: p.block 12 columns
+        .col-xs-10: p.block 10 columns
+        .col-xs-2:  p.block 2 columns
+        .col-xs-9:  p.block 9 columns
+        .col-xs-3:  p.block 3 columns
+        .col-xs-8:  p.block 8 columns
+        .col-xs-4:  p.block 4 columns
+        .col-xs-7:  p.block 7 columns
+        .col-xs-5:  p.block 5 columns
+        .col-xs-6:  p.block 6 columns
+        .col-xs-6:  p.block 6 columns
+
+  footer: .container.text-center
+    p &copy; #{new Date().getFullYear()} Stephen Hutchings
+
+
+  script(src="../build/visible-grid.js" type="text/javascript")
+  script(type="text/javascript").
+    myGrid = new Grid();
+    
