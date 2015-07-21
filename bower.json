@@ -5,7 +5,7 @@
   "authors": [
     "stephenhutchings <stephen@creativelicence.com.au>"
   ],
-  "description": "A micro-library for iOS-like tap events in the browser",
+  "description": "Design and develop with a visible grid",
   "main": "build/zepto.revolver.min.js",
   "keywords": [
     "touch",
