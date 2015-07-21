@@ -1,19 +1,20 @@
 {
-  "name": "zepto.iostap",
+  "name": "visible-grid",
   "version": "0.0.1",
-  "homepage": "https://github.com/stephenhutchings/zepto.iostap",
+  "homepage": "https://github.com/stephenhutchings/visible-grid",
   "authors": [
     "stephenhutchings <stephen@creativelicence.com.au>"
   ],
   "description": "Design and develop with a visible grid",
-  "main": "build/zepto.revolver.min.js",
+  "main": "build/visible-grid.min.js",
   "keywords": [
-    "touch",
-    "tap",
-    "ios",
-    "zepto",
-    "plugin",
-    "lightwieght"
+    "grid",
+    "design",
+    "develop",
+    "visible",
+    "tools",
+    "pixel",
+    "perfect"
   ],
   "license": "MIT",
   "ignore": [
