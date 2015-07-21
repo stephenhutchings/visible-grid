@@ -18,6 +18,9 @@
           line-height: 16px;
           font-family: sans-serif;
         }
+        ##{id} * {
+          box-sizing: border-box;
+        }
         ##{id} form,
         ##{id} label,
         ##{id} footer {
