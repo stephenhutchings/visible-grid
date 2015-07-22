@@ -183,7 +183,7 @@
       x         = (width - size) / 2
       col       = (size + gutter) / columns
 
-      @elements.form.column.value = (col / pixelDensity).toFixed(2)
+      @elements.form.column.value = ((col - gutter) / pixelDensity).toFixed(2)
 
       @context.strokeStyle = color
       @context.lineWidth   = 1
