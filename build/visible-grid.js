@@ -1,4 +1,4 @@
-/* visible-grid - v0.0.1 - MIT */
+/* visible-grid - v0.1.0 - MIT */
 /* Design and develop with a visible grid */
 /* https://github.com/stephenhutchings/visible-grid.git */
 (function(window, document, Math) {
@@ -237,7 +237,6 @@
       size *= pixelDensity;
       baseline *= pixelDensity;
       grid *= pixelDensity;
-      divisions *= pixelDensity;
       if (size < 1) {
         size = width - gutter;
       }
