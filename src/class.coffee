@@ -177,7 +177,6 @@
       size      *= pixelDensity
       baseline  *= pixelDensity
       grid      *= pixelDensity
-      divisions *= pixelDensity
 
       size      = width - gutter if size < 1
       x         = (width - size) / 2
