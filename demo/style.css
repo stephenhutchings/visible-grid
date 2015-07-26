@@ -43,6 +43,10 @@ h2 {
   height: 40px;
 }
 
+a, code {
+  color: #5DAFFF;
+}
+
 pre {
   padding: 10px;
 }
@@ -51,7 +55,6 @@ code {
   background-color: transparent;
   padding: 0;
   line-height: 1em;
-  color: #5DAFFF;
   font-family: "Source Code Pro", monospace;
   font-weight: normal;
   font-size: 90%;
@@ -103,6 +106,11 @@ footer {
   margin-top: 60px;
   padding: 20px 0;
   background-color: #eee;
+}
+
+footer a,
+footer code {
+  color: #333;
 }
 
 @media (min-width: 768px){

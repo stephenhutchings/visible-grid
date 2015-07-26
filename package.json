@@ -10,6 +10,20 @@
     "type": "git",
     "url": "https://github.com/stephenhutchings/visible-grid.git"
   },
+  "keywords": [
+    "design",
+    "develop",
+    "web",
+    "grid",
+    "visible",
+    "layout",
+    "html",
+    "indesign",
+    "tool",
+    "web design",
+    "utility",
+    "bookmarklet"
+  ],
   "author": "Stephen Hutchings",
   "license": "MIT",
   "bugs": {

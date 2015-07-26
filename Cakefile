@@ -5,8 +5,8 @@ rmdir = require "rimraf"
 jade = require "jade"
 
 # Name and version taken from package
-config = require('./package.json')
-bower = require('./bower.json')
+config = require("./package.json")
+bower = require("./bower.json")
 
 # Prepend files with info comments
 prepend = """/* #{config.name} - v#{config.version} - #{config.license} */
@@ -18,8 +18,10 @@ flour.compilers.coffee.bare = true
 
 # Build the demo html
 task "build:demo", ->
+  bookmarklet = fs.readFileSync("./build/bookmarklet.min.js")
+
   fs.writeFile "demo/index.html",
-    jade.renderFile("demo/index.jade", {config})
+    jade.renderFile("demo/index.jade", {config, bookmarklet})
 
 # Update bower.json, to match package.json
 # Using npm version will therefore update bower
@@ -34,9 +36,15 @@ task "build:src", ->
           res["template.coffee"].output +
           res["defaults.coffee"].output
 
+    bkt = res["bookmarklet.coffee"].output
+
     fs.writeFile "build/#{config.name}.js", prepend + all, ->
       minify "build/#{config.name}.js", (res) ->
         fs.writeFile "build/#{config.name}.min.js", prepend + res
+
+    fs.writeFile "build/bookmarklet.js", bkt, ->
+      minify "build/bookmarklet.js", (res) ->
+        fs.writeFile "build/bookmarklet.min.js", res
 
 task "build", ->
   invoke "build:src"

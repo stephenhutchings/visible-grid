@@ -2,11 +2,13 @@
 
 `visible-grid` makes it easier to develop and design beautiful web
 applications by making your grid system visible while you work.
-See the [demo](http://stephenhutchings.github.io/visible-grid/demo/).
+See the [demo][1].
 
 ### How to use it
 
-Download the source files from the `build` directory, or use [Bower](http://www.bower.io/).
+The easiest way to use it is via the bookmarklet available [here][1].
+
+Download the source files from the `build` directory, or use [Bower][2].
 
 ```bash
 $ bower install visible-grid
@@ -70,3 +72,6 @@ $ cake lint     # Lint the compiled javascript.
 ```
 
 Feel free to submit [issues](https://github.com/stephenhutchings/visible-grid/issues) or make [pull](https://github.com/stephenhutchings/visible-grid/pulls) requests.
+
+[1]: http://stephenhutchings.github.io/visible-grid/demo/
+[2]: http://www.bower.io/
