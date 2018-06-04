@@ -2,7 +2,28 @@
 applications by making your grid system visible while you work.</p><p> Configure as many grids as you want. They are saved to <code>localStorage</code>, so you can use them on any page your working on.
 Resizing is taken care of automatically, so if you have a
 responsive set-up simply resize to see the grid at that width.</p><p>Quickly toggle the UI and grid with the <strong>“u”</strong> and <strong>“g”</strong> hot-keys. You can programmatically add, remove and reset grids 
-too.</p><p> You can get the script via <code>bower install visible-grid</code>.</p></div><div class="col-sm-6"><h2>How do I use it?</h2><p> The easiest way is to use this <a href="javascript:#{bookmarklet}">bookmarklet.</a></p><p> Otherwise, you can add the JS to your page. It's all packaged 
+too.</p><p> You can get the script via <code>bower install visible-grid</code>.</p></div><div class="col-sm-6"><h2>How do I use it?</h2><p> The easiest way is to use this <a href="javascript:/* visible-grid - v0.2.0 - MIT */
+/* Design and develop with a visible grid */
+/* https://github.com/stephenhutchings/visible-grid.git */
+&quot;use strict&quot;;
+
+(function (window, document) {
+  var script;
+  if (window.Grid) {
+    return new Grid();
+  } else if (!document.getElementById(&quot;visible-grid-js&quot;)) {
+    script = document.createElement(&quot;script&quot;);
+    script.id = &quot;visible-grid-js&quot;;
+    script.type = &quot;text/javascript&quot;;
+    script.src = &quot;http://s-ings.com/experiments/visible-grid/visible-grid.min.js&quot;;
+    document.getElementsByTagName(&quot;body&quot;)[0].appendChild(script);
+    script.onreadystatechange = script.onload = function (evt) {
+      if (!window.myGrid) {
+        return window.myGrid = new Grid();
+      }
+    };
+  }
+})(window, document);">bookmarklet.</a></p><p> Otherwise, you can add the JS to your page. It's all packaged 
 in there.</p><pre><code>&lt;script src="visual-grid.js" type="text/javascript"&gt;
 </code></pre><p> Then you can create a new instance on your page.</p><pre><code>var myGrid = new Grid();
 </code></pre></div></div></div><hr><div class="container text-center"><h4>Example</h4><p> This example shows Bootstrap’s 12 column grid. Resize your browser 

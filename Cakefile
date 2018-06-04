@@ -16,7 +16,8 @@ prepend = """/* #{config.name} - v#{config.version} - #{config.license} */
 
 # Build the demo html
 task "build:demo", ->
-  res = pug.renderFile("demo/index.pug", {config})
+  bookmarklet = fs.readFileSync("./build/bookmarklet.js")
+  res = pug.renderFile("demo/index.pug", { config, bookmarklet })
   fs.writeFileSync "demo/index.html", res
 
 # Update bower.json, to match package.json
