@@ -74,34 +74,56 @@ html
         | to demo the grid at different sizes.
 
       .row
-        .col-xs-12: p.block 12 columns
-        .col-xs-10: p.block 10 columns
-        .col-xs-2:  p.block 2 columns
-        .col-xs-9:  p.block 9 columns
-        .col-xs-3:  p.block 3 columns
-        .col-xs-8:  p.block 8 columns
-        .col-xs-4:  p.block 4 columns
-        .col-xs-7:  p.block 7 columns
-        .col-xs-5:  p.block 5 columns
-        .col-xs-6:  p.block 6 columns
-        .col-xs-6:  p.block 6 columns
+        .col-xs-12
+          .block
+            p 12 columns
+        .col-xs-10
+          .block
+            p 10 columns
+        .col-xs-2
+          .block
+            p 2 columns
+        .col-xs-9
+          .block
+            p 9 columns
+        .col-xs-3
+          .block
+            p 3 columns
+        .col-xs-8
+          .block
+            p 8 columns
+        .col-xs-4
+          .block
+            p 4 columns
+        .col-xs-7
+          .block
+            p 7 columns
+        .col-xs-5
+          .block
+            p 5 columns
+        .col-xs-6
+          .block
+            p 6 columns
+        .col-xs-6
+          .block
+            p 6 columns
 
-  footer: .container.text-center
-    p 
-      | &copy; #{new Date().getFullYear()} 
-      a(href="http://s-ings.com") 
-        | Stephen Hutchings
+  footer
+    .container.text-center
+      p
+        | &copy; #{new Date().getFullYear()} 
+        a(href="http://s-ings.com")
+          | Stephen Hutchings
 
-      | &ensp;&middot;&ensp;
-      
-      a(href="https://github.com/stephenhutchings/visible-grid") 
-        | View on GitHub
+        | &ensp;&middot;&ensp;
 
-      | &ensp;&middot;&ensp;
+        a(href="https://github.com/stephenhutchings/visible-grid")
+          | View on GitHub
 
-      code
-        = "v" + config.version
+        | &ensp;&middot;&ensp;
 
+        code
+          = "v" + config.version
 
   script(src="../build/visible-grid.js" type="text/javascript")
   script(type="text/javascript").

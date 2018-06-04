@@ -1,0 +1,8 @@
+{
+  "watch": [
+    "demo/",
+    "src/"
+  ],
+  "ext": "pug coffee",
+  "delay": "500"
+}
