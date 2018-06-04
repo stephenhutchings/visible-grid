@@ -26,6 +26,7 @@
       columns:   12
       gutter:    30
       baseline:  20
+      size:      0
       color:     "lightcoral"
     ,
       name:      "960 (12 Columns)"

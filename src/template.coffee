@@ -16,16 +16,17 @@
           pointer-events: none;
           font-size: 11px;
           line-height: 16px;
-          font-family: sans-serif;
+          font-family: -apple-system, BlinkMacSystemFont, \"Segoe UI\", Roboto, Helvetica, Arial, sans-serif;
         }
-        ##{id} * {
+        ##{id} form,
+        ##{id} form * {
+          all: unset;
           box-sizing: border-box;
         }
         ##{id} form,
         ##{id} label,
         ##{id} footer {
           display: block;
-          background: #333;
           padding: 0;
           margin: 0;
           color: #ccc;
@@ -37,20 +38,46 @@
           position: fixed;
           pointer-events: all;
         }
+        ##{id} fieldset {
+          border: 0;
+          padding: 0;
+          margin: 0;
+          background: rgba(0,0,0,0.88);
+          background-clip: padding-box;
+          display: block;
+        }
+        ##{id} fieldset + fieldset {
+          border-top: 1px solid rgba(0,0,0,0.5);
+        }
+        ##{id} fieldset:first-child {
+          border-radius: 2px 2px 0 0;
+        }
+        ##{id} fieldset:last-child {
+          border-radius: 0 0 2px 2px;
+        }
         ##{id} label {
           clear: both;
           margin-bottom: 0;
-          border-top: 1px solid #444;
-          border-bottom: 1px solid #222;
           cursor: pointer;
           font-weight: bold;
+          padding: 1px 0;
+          height: 22px;
+        }
+        ##{id} .legend {
+          font-weight: bold;
+          width: 100%;
+          margin: 0;
+          border: none;
+          padding: 4px 6px 2px;
+          display: block;
+          color: #fff;
         }
         ##{id} label span {
           display: inline-block;
-          width: 100px;
+          min-width: 100px;
           position: relative;
           z-index: 1;
-          padding: 4px 0 4px 12px;
+          padding-left: 6px;
         }
         ##{id} label em {
           font-style: normal;
@@ -63,6 +90,7 @@
         }
         ##{id} output {
           cursor: not-allowed;
+          color: #888;
         }
         ##{id} input[type=\"number\"],
         ##{id} output {
@@ -72,7 +100,6 @@
           border: none;
           font: inherit;
           box-sizing: border-box;
-          padding: 4px;
           font-family: monospace;
           width: 100%;
           text-align: right;
@@ -85,30 +112,41 @@
         ##{id} input[type=\"checkbox\"] {
           float: right;
           margin-right: 20px;
+          width: 16px;
+          height: 16px;
+          -webkit-appearance: checkbox;
+          -moz-appearance: checkbox;
         }
         ##{id} select {
           border: none;
           background: transparent;
-          margin: 4px;
+          margin: 0;
+          padding: 0 6px;
+          background: url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='#ffffff80'><polygon points='0,0 100,0 50,50'/></svg>\") no-repeat;
+          background-size: 8px;
+          background-position: calc(100% - 4px) 6px;
+          background-repeat: no-repeat;
         }
         ##{id} select[name=\"select\"] {
           width: 100px;
         }
+        ##{id} select[name=\"gridOrigin\"],
         ##{id} select[name=\"color\"] {
-          width: 72px;
-          margin-left: -21px;
+          width: 64px;
+          margin-left: -10px;
+          z-index: 1;
+          position: relative;
         }
         ##{id} input[type=\"button\"] {
-          width: 20px;
           border: none;
           background: transparent;
           margin-left: 3px;
           display: inline-block;
           border-radius: 3px;
-          padding: 0 4px;
+          padding: 0 8px;
           height: 20px;
-          margin: 4px 0;
           text-align: center;
+          font-weight: bold;
         }
         ##{id} input::-webkit-inner-spin-button,
         ##{id} input::-webkit-outer-spin-button {
@@ -125,18 +163,20 @@
           color: #fff;
           background-color: #444;
         }
-        ##{id} footer {
-          padding: 4px 12px;
-        }
-        ##{id} footer strong {
+        ##{id} strong {
           color: #fff;
         }
         ##{id} .disable {
           display: none;
         }
+        ##{id} footer {
+          padding: 2px 6px 4px;
+          background: transparent;
+        }
       </style>
       <canvas></canvas>
       <form>
+        <fieldset>
         <label>
           <select name=\"select\"></select>
           <input title=\"Add grid\" type=\"button\" name=\"add\" value=\"+\" />
@@ -157,9 +197,16 @@
             <option value=\"rebeccapurple\">Purple</option>
           </select>
         </label>
+        <label title=\"Automatically choose the right grid for your viewport\">
+          <span>Responsive</span>
+          <input name=\"responsive\" type=\"checkbox\" checked>
+        </label>
+        </fieldset>
+        <fieldset>
+          <span class=\"legend\">Columns</span>
         <label title=\"The number of columns\">
           <span>Columns</span>
-          <input name=\"columns\" type=\"number\" min=\"1\" max=\"30\" />
+          <input name=\"columns\" type=\"number\" min=\"0\" max=\"30\" />
         </label>
         <label title=\"The total width of the grid without outer gutters. Set a value of 0 for full-width containers. \">
           <span>Container Width</span>
@@ -181,28 +228,49 @@
           <input name=\"offset\" type=\"number\" min=\"0\" />
           <em>px</em>
         </label>
-        <label title=\"Create an additional grid\">
-          <span>Document Grid</span>
-          <input name=\"grid\" type=\"number\" min=\"0\" />
-          <em>px</em>
-        </label>
-        <label title=\"Create subdivisions within the document grid\">
-          <span>Grid Divisions</span>
-          <input name=\"divisions\" type=\"number\" min=\"0\" />
-          <em>px</em>
-        </label>
-        <label title=\"Constrain the grid to the container width\">
-          <span>Constrain Grid</span>
-          <input name=\"constrain\" type=\"checkbox\" />
-        </label>
         <label title=\"The computed column width\">
           <span>Column Width</span>
           <output name=\"column\" type=\"number\"></output>
           <em>px</em>
         </label>
-        <footer>
-          Toggle <strong>u</strong>ser interface / <strong>g</strong>rid
-        </footer>
+        </fieldset>
+        <fieldset>
+        <span class=\"legend\">Document Grid</span>
+        <label title=\"Create an additional grid\">
+          <span>Size</span>
+          <input name=\"grid\" type=\"number\" min=\"0\" />
+          <em>px</em>
+        </label>
+        <label title=\"Create subdivisions within the document grid\">
+          <span>Divisions</span>
+          <input name=\"divisions\" type=\"number\" min=\"0\" />
+        </label>
+        <label title=\"Constrain the grid to the container width\">
+          <span>Constrain</span>
+          <input name=\"constrain\" type=\"checkbox\" />
+        </label>
+        <label title=\"Inset the grid from the top of the page\">
+          <span>Vertical Offset</span>
+          <input name=\"gridOffset\" type=\"number\" />
+          <em>px</em>
+        </label>
+        <label title=\"Start the grid from the left, middle or right\">
+          <span>Origin</span>
+          <select name=\"gridOrigin\">
+            <option selected>Left</option>
+            <option>Middle</option>
+            <option>Right</option>
+          </select>
+        </label>
+        </fieldset>
+        <fieldset>
+          <footer>
+            Toggle <strong>U</strong>I / <strong>G</strong>rid
+            <input
+               title=\"Reset all grids to defaults\"
+              name=\"reset\" value=\"Reset\" type=\"button\">
+          </footer>
+        </fieldset>
       <form>
     "
 )()

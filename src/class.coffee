@@ -16,13 +16,17 @@
         canvas:   @el.querySelector("canvas")
         form:     @el.querySelector("form")
 
+      @keys = [
+        "gutter", "columns", "size", "color", "baseline", "offset",
+        "grid", "divisions", "constrain", "gridOffset", "gridOrigin"
+      ]
+
       @context = @elements.canvas.getContext("2d")
 
       document.body.appendChild @el, "beforeEnd"
 
       @load()
       @bindEvents()
-      @__resize()
 
     getIndex: ->
       +@elements.form.select.value
@@ -42,10 +46,8 @@
             @remove()
           if e.target is @elements.form.add
             @prompt()
-          if e.target is @elements.form.constrain
-            i = @getIndex()
-            @grids[i].constrain = e.target.checked
-            @select(i)
+          if e.target is @elements.form.reset
+            @reset()
         when "keydown"
           @__keyDown(e)
         when "input"
@@ -82,15 +84,19 @@
 
       i = @getIndex()
 
-      switch e.target
-        when @elements.form.select
-          @select(i)
-        when @elements.form.color
-          @grids[i].color = e.target.value
-        else
-          @grids[i][e.target.name] = Math.max(+e.target.value, 0)
+      if e.target is @elements.form.select
+        @select(i)
+      else if e.target is @elements.form.responsive
+        @__resize(true)
+      else
+        for key in @keys
+          transform = switch @elements.form[key].type
+            when "number" then (el) -> parseInt(el.value, 10)
+            when "checkbox" then (el) -> el.checked
+            else (el) -> el.value
+          @grids[i][key] = transform @elements.form[key]
 
-      @save()
+        @save()
 
     __resize: (e) ->
       width  = document.body.offsetWidth
@@ -101,8 +107,8 @@
       @elements.canvas.height = height * pixelDensity
 
       i =
-        if e
-          (i for { size }, i in @grids when size < width)[0]
+        if e and @elements.form.responsive.checked
+          (i for { size, gutter }, i in @grids when size + gutter < width)[0]
         else
           (i for { active }, i in @grids when active)[0]
 
@@ -110,13 +116,17 @@
 
     select: (i) ->
       @elements.form.select.value = i
-      @elements.form.constrain.checked = @grids[i].constrain
 
-      for key in ["columns", "size", "gutter", "baseline", "color", "grid", "divisions", "offset"]
-        @elements.form[key]?.value = @grids[i][key] or 0
+      for key in @keys
+        transform = switch @elements.form[key].type
+          when "checkbox" then (el, val) -> el.checked = val
+          else (el, val) -> el.value = val or 0
+
+        transform @elements.form[key], @grids[i][key]
 
       grid.active = i is j for grid, j in @grids
 
+      @save()
       @draw()
 
     prompt: ->
@@ -167,85 +177,134 @@
     draw: ->
       { width, height } = @elements.canvas
 
-      { gutter, columns, size, color, baseline,
-        offset, grid, divisions, constrain } = @grids[@getIndex()]
+      data = Object.assign({}, @grids[@getIndex()])
 
-      size   ?= 0
-      gutter ?= 0
+      data.size      ?= 0
+      data.gutter    ?= 0
+      data.offset    ?= 0
+      data.constrain ?= false
 
-      gutter    *= pixelDensity
-      size      *= pixelDensity
-      baseline  *= pixelDensity
-      grid      *= pixelDensity
+      data.gutter    *= pixelDensity
+      data.size      *= pixelDensity
+      data.baseline  *= pixelDensity
+      data.grid      *= pixelDensity
 
-      size      = width - gutter if size < 1
-      x         = (width - size) / 2
-      col       = (size + gutter) / columns
+      data.size      = width - data.gutter if data.size < 1
+      data.x         = (width - data.size) / 2
+      data.colWidth  = (data.size + data.gutter) / data.columns - data.gutter
 
-      @elements.form.column.value = ((col - gutter) / pixelDensity).toFixed(2)
+      @elements.form.column.value =
+        if data.columns > 0
+          ((data.colWidth - data.gutter) / pixelDensity).toFixed(2)
+        else
+          "None"
 
-      @context.strokeStyle = color
+      @context.strokeStyle = data.color
+      @context.fillStyle   = data.color
       @context.lineWidth   = 1
 
-      @context.globalAlpha = 1
       @context.clearRect(0, 0, width, height)
+
+      @__drawColumns(data, width, height)
+      @__drawBaseline(data, width, height)
+      @__drawGrid(data, width, height)
+
+    __drawColumns: (data, width, height) ->
+      return if data.columns is 0
+
       @context.beginPath()
 
-      if columns > 0
-        for i in [0..columns]
+      if data.gutter is 0
+        for i in [0..data.columns]
           if i > 0
-            @context.moveTo(x + i * col - gutter, 0)
-            @context.lineTo(x + i * col - gutter, height)
-          if i < columns
-            @context.moveTo(x + i * col, 0)
-            @context.lineTo(x + i * col, height)
+            @context.moveTo(data.x + i * data.colWidth, 0)
+            @context.lineTo(data.x + i * data.colWidth, height)
+          if i < data.columns
+            @context.moveTo(data.x + i * (data.colWidth + data.gutter), 0)
+            @context.lineTo(data.x + i * (data.colWidth + data.gutter), height)
 
-      if baseline > 0
-        offset ?= 0
-        rows = Math.floor((height - offset) / baseline)
+        @context.globalAlpha = 1
+        @context.stroke()
 
-        for i in [0..rows]
-          @context.moveTo(x, i * baseline + offset)
-          @context.lineTo(width - x, i * baseline + offset)
+      else
+        for i in [0...data.columns]
+          @context.rect(
+            data.x + i * (data.colWidth + data.gutter), 0, data.colWidth, height
+          )
+
+        @context.globalAlpha = 0.12
+        @context.fill()
+
+    __drawBaseline: (data, width, height) ->
+      return if data.baseline is 0
+
+      rows = Math.floor((height - data.offset) / data.baseline)
+
+      @context.beginPath()
+
+      for i in [0..rows]
+        @context.moveTo(data.x, i * data.baseline + data.offset)
+        @context.lineTo(width - data.x, i * data.baseline + data.offset)
 
       @context.closePath()
+      @context.globalAlpha = 1
       @context.stroke()
 
-      @context.globalAlpha = 0.33
       @context.beginPath()
 
-      if grid > 0
+    __drawGrid: (data, width, height) ->
+      return if data.grid is 0
 
-        unless constrain
-          x    = 0
-          size = width
+      size = data.size
 
-        rows = Math.floor(height / grid)
-        cols = Math.floor(size / grid)
+      unless data.constrain
+        data.x = 0
+        size   = width
+
+      if data.gridOffset
+        y = data.gridOffset * pixelDensity
+      else
+        y = 0
+
+      rows = Math.floor((height - y * 2) / data.grid)
+      cols = Math.floor(size / data.grid)
+
+      switch data.gridOrigin
+        when "Right"
+          xOff = (size - cols * data.grid)
+
+        when "Middle"
+          xOff = (size - (cols - 1) * data.grid) / 2
+          cols -= 1
+
+        else
+          xOff = 0
+
+      @context.beginPath()
+
+      for i in [0..rows]
+        @context.moveTo(data.x, y + i * data.grid)
+        @context.lineTo(width - data.x, y + i * data.grid)
+
+      for i in [0..cols]
+        @context.moveTo(xOff + data.x + i * data.grid, y)
+        @context.lineTo(xOff + data.x + i * data.grid, height - y)
+
+      if data.divisions > 0
+        grid = data.grid / data.divisions
+        xOff = xOff % grid
+        rows = Math.floor((height - y * 2) / grid)
+        cols = Math.floor((size - xOff) / grid)
 
         for i in [0..rows]
-          @context.moveTo(x, i * grid)
-          @context.lineTo(width - x, i * grid)
+          @context.moveTo(data.x, y + i * grid)
+          @context.lineTo(width - data.x, y + i * grid)
 
         for i in [0..cols]
-          @context.moveTo(x + i * grid, 0)
-          @context.lineTo(x + i * grid, height)
+          @context.moveTo(xOff + data.x + i * grid, y)
+          @context.lineTo(xOff + data.x + i * grid, height - y)
 
-        if divisions > 0
-
-          grid = grid / divisions
-          rows = Math.floor(height / grid)
-          cols = Math.floor(size / grid)
-
-          for i in [0..rows]
-            @context.moveTo(x, i * grid)
-            @context.lineTo(width - x, i * grid)
-
-          for i in [0..cols]
-            @context.moveTo(x + i * grid, 0)
-            @context.lineTo(x + i * grid, height)
-
-      @context.closePath()
+      @context.globalAlpha = 0.33
       @context.stroke()
 
     show: ->
@@ -263,11 +322,12 @@
       @grids = []
       grids = (try JSON.parse(localStorage.getItem storageKey)) or @defaults
       @add grid for grid in grids
+      @__resize()
 
     reset: ->
       localStorage.removeItem storageKey
-      @grids = [].concat @defaults
-      @save()
+      @elements.form.select.innerHTML = ""
+      @load()
 
   window.Grid = Grid
 
