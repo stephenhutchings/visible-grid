@@ -1,12 +1,12 @@
 {
   "name": "visible-grid",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "homepage": "https://github.com/stephenhutchings/visible-grid",
   "authors": [
     "stephenhutchings <stephen@creativelicence.com.au>"
   ],
   "description": "Design and develop with a visible grid",
-  "main": "build/visible-grid.min.js",
+  "main": "build/visible-grid.js",
   "keywords": [
     "grid",
     "design",
