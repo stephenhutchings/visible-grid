@@ -29,11 +29,11 @@ var myGrid = new Grid();
 ### Tell me more
 
 Configure as many grids as you want. They are saved to `localStorage`, so you
-can use them on any page your working on. Resizing is taken care of
+can use them on any page you're working on. Resizing is taken care of
 automatically, so if you have a responsive set-up simply resize to see the
 grid at that width.
 
-Quickly toggle the UI and grid with the “u” and “g” hot-keys.
+Quickly toggle the UI and grid with the <kbd>u</kbd> and <kbd>g</kbd> hot-keys.
 
 You can reset your storage...
 
